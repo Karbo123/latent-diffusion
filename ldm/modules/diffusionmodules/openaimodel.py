@@ -79,7 +79,9 @@ class TimestepEmbedSequential(nn.Sequential, TimestepBlock):
 
     def forward(self, x, emb, context=None):
         for layer in self:
-            if isinstance(layer, TimestepBlock):
+            if isinstance(layer, TimestepEmbedSequential):
+                x = layer(x, emb, context)
+            elif isinstance(layer, TimestepBlock):
                 x = layer(x, emb)
             elif isinstance(layer, SpatialTransformer):
                 x = layer(x, context)
